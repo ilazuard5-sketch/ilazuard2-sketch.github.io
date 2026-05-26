@@ -321,15 +321,15 @@
       filter: drop-shadow(4px 8px 12px rgba(0,0,0,0.5));
     }
 
-    /* ─── FIXED DRAGGABLE CARD STYLING (FROM INDEX1) ─── */
+    /* ─── NEW SPOTIFY DRAGGABLE STYLING (FROM INDEX1) ─── */
     .gift-item {
-      position: fixed; /* Fixed viewport reference avoids parent layout containment issues */
-      bottom: 30px;
-      left: 30px;
+      position: fixed; /* Fixed layer ensures it flows above everything */
+      bottom: 40px;
+      left: 40px;
       user-select: none;
       cursor: grab;
       touch-action: none;
-      z-index: 2000; /* Stays reliably over other elements */
+      z-index: 99999;
     }
     
     .gift-item:active {
@@ -338,19 +338,18 @@
     
     .gift-item.dragging {
       transition: none !important;
-      cursor: grabbing;
     }
     
     .gift-item.dragging iframe {
-      pointer-events: none; /* Keeps iframe inside from eating drag gestures */
+      pointer-events: none; /* Prevents frame focus from stopping manual drag moves */
     }
 
     .sp-embed-card {
       background: #121212;
       border-radius: 14px;
       overflow: hidden;
-      width: 320px;
-      box-shadow: 0 16px 38px rgba(0,0,0,0.5);
+      width: 340px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
       border: 1px solid rgba(255,255,255,0.1);
     }
     
@@ -361,31 +360,30 @@
     }
 
     .embed-drag-handle {
-      height: 28px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: grab;
-      background: rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.08);
     }
     
     .embed-drag-handle::after {
       content: '';
-      width: 40px;
+      width: 36px;
       height: 4px;
       border-radius: 2px;
-      background: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.4);
     }
 
-    /* Scroll Indicator Arrow */
+    /* Scroll Down Indicator */
     .scroll-hint {
       position: absolute;
-      bottom: 10px;
+      bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       color: #ecd5b7;
-      font-size: 14px;
+      font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 2px;
       animation: bounce 2s infinite;
@@ -842,7 +840,7 @@
   <div class="gift-item" id="draggable-spotify">
     <div class="sp-embed-card">
       <div class="embed-drag-handle"></div>
-      <iframe src="https://open.spotify.com/embed/track/6UorE6gP9Cba4g17ZpU7pA?utm_source=generator&theme=0" width="100%" height="152" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGo6j5r8?utm_source=generator" width="100%" height="152" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>
   </div>
 
@@ -1221,7 +1219,7 @@
   <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // 1. ZINE BOOK FLIPPER INITIALIZATION
+      // 1. ZINE BOOK INITIALIZER
       const pageFlip = new St.PageFlip(document.getElementById("book"), {
         width: 450,
         height: 600,
@@ -1235,7 +1233,7 @@
       });
       pageFlip.loadFromHTML(document.querySelectorAll(".page"));
 
-      // 2. MOUSE & TOUCH DRAG MANAGER FOR SPOTIFY EMBED
+      // 2. MOUSE/TOUCH POSITION LOGIC FOR SPOTIFY
       const dragItem = document.getElementById('draggable-spotify');
       let isDragging = false;
       let startX, startY, initialLeft, initialTop;
@@ -1272,7 +1270,7 @@
         const dy = clientY - startY;
         dragItem.style.left = (initialLeft + dx) + 'px';
         dragItem.style.top = (initialTop + dy) + 'px';
-        dragItem.style.bottom = 'auto'; // Break basic attachment rules once moved
+        dragItem.style.bottom = 'auto';
       }
 
       function endDrag() {
