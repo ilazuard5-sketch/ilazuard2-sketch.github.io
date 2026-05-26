@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Box Of Memories & Birthday Zine 🎂</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&family=Libre+Baskerville:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ─── GENERAL STYLES & RESET ─── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #3d0c11;
+      background-image: 
+        radial-gradient(rgba(0, 0, 0, 0.3) 15%, transparent 16%),
+        radial-gradient(rgba(0, 0, 0, 0.3) 15%, transparent 16%),
+        linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05)),
+        linear-gradient(45deg, rgba(0,0,0,0.05) 25%, #3d0c11 25%, #3d0c11 75%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05));
+      background-size: 4px 4px, 4px 4px, 30px 30px, 30px 30px;
+      background-position: 0 0, 2px 2px, 0 0, 15px 15px;
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .section-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 60px 20px;
+      position: relative;
+    }
+
+    /* ─── SECTION 1: PAGE1.HTML CANVAS ─── */
+    .scrapbook-canvas {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      height: 880px;
+      margin: 0 auto;
+    }
+
+    .main-happy-text {
+      position: absolute;
+      top: 80px;
+      left: 400px;
+      font-family: 'Caveat', cursive;
+      font-size: 90px;
+      color: #f7e1bd;
+      transform: rotate(-8deg);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .notepad-scrap {
+      position: absolute;
+      top: 175px;
+      left: 310px;
+      width: 160px;
+      height: 240px;
+      background: #fdf5e6;
+      background-image: linear-gradient(#e1d3bc 1px, transparent 1px);
+      background-size: 100% 20px;
+      background-position: 0 10px;
+      box-shadow: 3px 6px 15px rgba(0, 0, 0, 0.4);
+      transform: rotate(5deg);
+      padding: 25px 12px 10px;
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    .notepad-scrap::before {
+      content: '♥';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #701c1c;
+      font-size: 20px;
+    }
+
+    .notepad-handwriting {
+      font-family: 'Caveat', cursive;
+      font-size: 16px;
+      line-height: 20px;
+      color: #4a3b32;
+      opacity: 0.85;
+      margin-top: 12px;
+    }
+
+    .filmstrip-container {
+      position: absolute;
+      top: 155px;
+      left: -15px;
+      width: 255px;
+      background: #eae6df;
+      box-shadow: -4px 8px 25px rgba(0, 0, 0, 0.5);
+      transform: rotate(-9deg);
+      z-index: 4;
+      padding-bottom: 25px;
+    }
+
+    .filmstrip-container::before,
+    .filmstrip-container::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 12px;
+      background-size: 16px 16px;
+      background-repeat: repeat-x;
+    }
+
+    .filmstrip-container::before {
+      top: -11px;
+      background-image: radial-gradient(circle at 8px -4px, transparent 8px, #eae6df 9px);
+    }
+
+    .filmstrip-container::after {
+      bottom: -11px;
+      background-image: radial-gradient(circle at 8px 12px, transparent 8px, #eae6df 9px);
+    }
+
+    .filmstrip-header {
+      padding: 20px 15px 10px;
+      text-align: center;
+    }
+
+    .filmstrip-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 400;
+      color: #2b2b2b;
+      letter-spacing: 0.5px;
+    }
+
+    .photo-slots-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 15px;
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #1c1c1c;
+      border: 1px solid rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(20%) contrast(110%);
+    }
+
+    .filmstrip-footer-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-align: center;
+      margin-top: 20px;
+      letter-spacing: -1px;
+    }
+
+    .notebook-underlay {
+      position: absolute;
+      top: 170px;
+      left: -5px;
+      width: 240px;
+      height: 520px;
+      background: #fcfaf2;
+      box-shadow: -2px 5px 15px rgba(0, 0, 0, 0.3);
+      transform: rotate(-6deg);
+      z-index: 3;
+      border-left: 12px dashed #e3dec3;
+    }
+
+    .calendar-scrap {
+      position: absolute;
+      top: 335px;
+      left: 360px;
+      width: 275px;
+      background: #ffffff;
+      box-shadow: 5px 8px 22px rgba(0, 0, 0, 0.4);
+      transform: rotate(6deg) translateX(-50%);
+      padding: 16px 18px 20px;
+      z-index: 5;
+      border-radius: 2px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #222;
+      padding-bottom: 4px;
+    }
+
+    .calendar-month {
+      font-family: 'Playfair Display', serif;
+      font-size: 25px;
+      font-weight: 700;
+      color: #000000;
+      line-height: 1;
+    }
+
+    .calendar-year {
+      font-family: 'Playfair Display', serif;
+      font-size: 23px;
+      font-weight: 700;
+      color: #000000;
+      line-height: 1;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      row-gap: 8px;
+      text-align: center;
+    }
+
+    .weekday-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: #c0392b;
+      margin-bottom: 4px;
+    }
+
+    .weekday-label:nth-child(n+2) { color: #333; }
+
+    .calendar-day {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: #222;
+      padding: 2px 0;
+      position: relative;
+    }
+
+    .calendar-day.sunday { color: #c0392b; }
+
+    .calendar-day.heart-sticker::after {
+      content: '❤️';
+      position: absolute;
+      font-size: 20px;
+      top: -1px;
+      right: -1px;
+      transform: rotate(15deg);
+    }
+
+    .birthday-overlay-text {
+      position: absolute;
+      top: -200px;
+      left: 240px;
+      font-family: 'Caveat', cursive;
+      font-size: 42px;
+      color: #d4af37;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      transform: rotate(-12deg);
+      width: 120%;
+      pointer-events: none;
+      z-index: 6;
+      white-space: nowrap;
+    }
+
+    .bottom-lettering {
+      position: absolute;
+      bottom: 80px;
+      left: 330px;
+    }
+
+    .bottom-lettering p {
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #ecd5b7;
+      letter-spacing: 0.5px;
+    }
+
+    .asset-pin {
+      position: absolute;
+      top: 415px;
+      left: -25px;
+      width: 50px;
+      height: auto;
+      transform: rotate(25deg);
+      z-index: 12;
+      filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.4));
+    }
+
+    .asset-cherry {
+      position: absolute;
+      top: 310px;
+      left: 410px;
+      width: 55px;
+      height: auto;
+      transform: rotate(-5deg);
+      z-index: 12;
+      filter: drop-shadow(3px 4px 5px rgba(0,0,0,0.4));
+    }
+
+    .asset-flower {
+      position: absolute;
+      bottom: 120px;
+      left: 185px;
+      width: 140px;
+      height: auto;
+      transform: rotate(-2deg);
+      z-index: 12;
+      filter: drop-shadow(4px 8px 12px rgba(0,0,0,0.5));
+    }
+
+   /* ─── SPOTIFY DRAGGABLE EMBED STYLING ─── */
+.gift-item {
+  position: absolute;
+  user-select: none;
+  cursor: grab;
+  touch-action: none;
+  z-index: 100;
+}
+.gift-item:active {
+  cursor: grabbing;
+}
+.gift-item.dragging {
+  transition: none !important;
+  z-index: 9999 !important;
+  cursor: grabbing;
+}
+.gift-item.dragging iframe {
+  pointer-events: none; /* Disable iframe pointer events while dragging so drag isn't stolen */
+}
+
+/* Spotify embed card container */
+.sp-embed-card {
+  background: #121212;
+  border-radius: 14px;
+  overflow: hidden;
+  width: 360px; /* Matching exact index1 width */
+  box-shadow: 6px 8px 28px rgba(0,0,0,0.38);
+}
+.sp-embed-card iframe {
+  display: block;
+  width: 100%;
+  border: none;
+}
+
+/* Drag handle strip */
+.embed-drag-handle {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  background: rgba(0,0,0,0.18);
+}
+.embed-drag-handle::after {
+  content: '';
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.4);
+}
+
+    /* Scroll Indicator Arrow */
+    .scroll-hint {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ecd5b7;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: bounce 2s infinite;
+      font-family: 'Courier Prime', monospace;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+      40% { transform: translate(-50%, -10px); }
+      60% { transform: translate(-50%, -5px); }
+    }
+
+
+    /* ─── SECTION 2: PAGE2.HTML BOOK ZINE ─── */
+    .book-container {
+      width: 900px;
+      height: 600px;
+      filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6));
+    }
+
+    .page {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .page.hard { background: #8b1a1a; }
+
+    /* Cover Page */
+    .cover-page {
+      background-color: #e8e5df;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 36px 40px 28px;
+      height: 100%;
+    }
+
+    .cover-title-top {
+      font-family: 'Dancing Script', cursive;
+      font-size: 64px;
+      color: #2a2a2a;
+      letter-spacing: -1px;
+      line-height: 1;
+      align-self: flex-start;
+      margin-left: 20px;
+    }
+
+    .cover-oval-frame {
+      position: relative;
+      width: 200px;
+      height: 250px;
+      flex-shrink: 0;
+    }
+
+    .cover-oval-frame .bow {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 36px;
+      z-index: 10;
+    }
+
+    .cover-oval-photo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #8b1a1a;
+      outline: 5px solid #e8e5df;
+      outline-offset: 3px;
+    }
+
+    .scallop-svg {
+      position: absolute;
+      inset: -14px;
+      width: calc(100% + 28px);
+      height: calc(100% + 28px);
+      pointer-events: none;
+    }
+
+    .cover-title-bottom {
+      font-family: 'Dancing Script', cursive;
+      font-size: 72px;
+      color: #2a2a2a;
+      letter-spacing: -1px;
+      line-height: 1;
+      align-self: flex-end;
+      margin-right: 10px;
+    }
+
+    .cover-subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #666;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* Letter Page */
+    .letter-page {
+      background: #8b1a1a;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .folder-wrapper {
+      position: relative;
+      width: 340px;
+    }
+
+    .folder-tab {
+      background: #f5f0e8;
+      border-radius: 8px 8px 0 0;
+      padding: 6px 18px 0;
+      display: inline-block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: #555;
+      position: relative;
+      left: 20px;
+    }
+
+    .folder-body {
+      background: #f5f0e8;
+      border-radius: 0 8px 8px 8px;
+      padding: 22px 24px 24px;
+      box-shadow: 3px 4px 12px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    .folder-top-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .polaroid-small {
+      width: 80px;
+      height: 90px;
+      background: white;
+      padding: 5px 5px 16px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+      transform: rotate(-2deg);
+      flex-shrink: 0;
+    }
+
+    .polaroid-small img {
+      width: 100%;
+      height: 65px;
+      object-fit: cover;
+      background: #ddd;
+    }
+
+    .folder-header-text { flex: 1; }
+    .folder-header-text .happy-Hardi {
+      font-family: 'Dancing Script', cursive;
+      font-size: 14px;
+      color: #888;
+      display: block;
+      text-align: right;
+      margin-bottom: 2px;
+    }
+
+    .folder-header-text .date-stamp {
+      font-size: 9px;
+      color: #aaa;
+      display: block;
+      text-align: right;
+    }
+
+    .dear-Hardi {
+      font-family: 'Dancing Script', cursive;
+      font-size: 22px;
+      color: #8b1a1a;
+      margin-bottom: 8px;
+    }
+
+    .letter-body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9px;
+      line-height: 1.7;
+      color: #444;
+    }
+
+    .letter-sign {
+      font-family: 'Dancing Script', cursive;
+      font-size: 18px;
+      color: #444;
+      text-align: right;
+      margin-top: 12px;
+    }
+
+    .red-underline {
+      display: inline-block;
+      border-bottom: 2px solid #8b1a1a;
+      color: #8b1a1a;
+    }
+
+    /* Calendar Page */
+    .calendar-page {
+      background: white;
+      height: 100%;
+      padding: 18px 20px;
+      overflow: hidden;
+    }
+
+    .cal-month-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .cal-month-nav .arrow { color: #888; font-size: 14px; }
+    .cal-month-nav .month-name { font-size: 18px; font-weight: 500; color: #222; }
+    .cal-grid { width: 100%; }
+
+    .cal-grid-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .cal-grid-header span { font-size: 9px; color: #999; font-weight: 500; }
+    .cal-row { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+    .cal-day { font-size: 11px; padding: 2px 0; color: #333; }
+
+    .cal-day.today {
+      background: #8b1a1a;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+    }
+
+    .cal-day.empty { color: transparent; }
+    .cal-date-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #444;
+      margin: 8px 0 10px;
+      border-top: 1px solid #eee;
+      padding-top: 8px;
+    }
+
+    .cal-events { display: flex; flex-direction: column; gap: 6px; }
+    .cal-event { display: flex; gap: 8px; align-items: flex-start; }
+    .cal-time { font-size: 9px; color: #999; width: 28px; flex-shrink: 0; padding-top: 2px; }
+    
+    .cal-event-card {
+      flex: 1;
+      background: #fff8f0;
+      border-radius: 6px;
+      padding: 5px 8px;
+      border-left: 3px solid #f5a623;
+      position: relative;
+    }
+
+    .cal-event-card.red { border-left-color: #8b1a1a; background: #fff0f0; }
+    .cal-event-card.green { border-left-color: #4caf50; background: #f0fff0; }
+    .cal-event-card.blue { border-left-color: #2196f3; background: #f0f4ff; }
+    .cal-event-title { font-size: 10px; font-weight: 500; color: #222; margin-bottom: 1px; }
+    .cal-event-time-small { font-size: 8px; color: #999; }
+    .cal-event-emoji { position: absolute; right: 6px; top: 4px; font-size: 18px; opacity: 0.7; }
+
+    .cal-chat-row { display: flex; gap: 8px; align-items: flex-end; margin-top: 8px; }
+    .chat-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ddd;
+      flex-shrink: 0;
+    }
+
+    .chat-bubble { background: #f0f0f0; border-radius: 12px 12px 12px 0; padding: 5px 10px; font-size: 9px; color: #333; }
+    .chat-bubble.green-bubble { background: #dcf8c6; border-radius: 12px 12px 0 12px; }
+
+    /* Stripe Page */
+    .stripe-page {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 30px;
+      background: repeating-linear-gradient(90deg, #f5efd6 0px, #f5efd6 22px, #8b1a1a 22px, #8b1a1a 44px);
+    }
+
+    .envelope-card {
+      background: white;
+      width: 220px;
+      padding: 18px 20px 14px;
+      position: relative;
+      box-shadow: 2px 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .envelope-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 50%;
+      background: #f0ebe0;
+      clip-path: polygon(0 0, 100% 0, 50% 80%);
+    }
+
+    .envelope-seal {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      background: #8b1a1a;
+      border-radius: 50%;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+    }
+
+    .affirmation-card {
+      background: white;
+      width: 220px;
+      padding: 20px 22px;
+      box-shadow: 2px 3px 10px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .affirmation-card p { font-family: 'Caveat', cursive; font-size: 16px; color: #333; line-height: 1.5; }
+    .affirmation-card p strong { display: block; margin-bottom: 6px; }
+
+    /* Wish Page */
+    .wish-page {
+      background: #8b1a1a;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 28px 20px;
+    }
+
+    .wish-title { font-family: 'Dancing Script', cursive; font-size: 36px; color: white; text-align: center; line-height: 1.2; }
+    .wish-subtitle { font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(255,255,255,0.75); text-align: center; font-style: italic; }
+    
+    .polaroid-wish {
+      background: white;
+      padding: 8px 8px 30px;
+      width: 200px;
+      box-shadow: 4px 6px 16px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .polaroid-wish .photo-area {
+      width: 100%;
+      height: 140px;
+      background: #e0dbd0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #999;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .polaroid-wish .photo-area img { width: 100%; height: 100%; object-fit: cover; }
+    .polaroid-date-row { display: flex; justify-content: space-between; padding: 6px 4px 0; font-family: 'DM Sans', sans-serif; font-size: 9px; color: #888; }
+    .hat-left, .hat-right { position: absolute; top: -18px; font-size: 24px; }
+    .hat-left { left: 20px; transform: rotate(-15deg); }
+    .hat-right { right: 20px; transform: rotate(10deg); }
+    .ribbon-bow { font-size: 40px; margin-top: 4px; }
+
+    /* Word Search Page */
+    .wordsearch-page {
+      background: #f0ede6;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px 20px;
+    }
+
+    .ws-page-label { font-size: 9px; color: #bbb; letter-spacing: 2px; text-transform: uppercase; display: flex; justify-content: space-between; width: 100%; }
+    .ws-grid { display: flex; flex-wrap: wrap; width: 280px; height: 230px; position: relative; justify-content: center; align-content: center; gap: 6px; }
+    .ws-circle { width: 34px; height: 34px; border-radius: 50%; background: #8b1a1a; color: white; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; }
+    .ws-legend { width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px 0; font-family: 'DM Sans', sans-serif; font-size: 9px; color: #666; }
+    .ws-legend .col { display: flex; flex-direction: column; gap: 2px; }
+
+    /* Gift Guide Page */
+    .gift-page {
+      background: #8b1a1a;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.15) 2px, transparent 2px);
+      background-size: 20px 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 24px 24px;
+    }
+
+    .gift-title { font-family: 'Dancing Script', cursive; font-size: 30px; color: #f5d76e; text-align: center; line-height: 1.2; }
+    .gift-notes-card { background: #fffef5; border-radius: 10px; width: 100%; padding: 10px 14px 14px; box-shadow: 2px 3px 10px rgba(0,0,0,0.2); }
+    .notes-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .notes-back { font-size: 10px; color: #007aff; }
+    .notes-title-label { font-size: 9px; color: #999; }
+    .notes-content { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: #222; }
+    .gift-meme-card { width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 2px 3px 10px rgba(0,0,0,0.25); position: relative; }
+    .gift-meme-card .meme-photo { width: 100%; height: 130px; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #666; text-align: center; overflow: hidden; }
+    .gift-meme-card .meme-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .meme-caption { position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); letter-spacing: 0.5px; }
+
+    /* Back Cover */
+    .backcover-page {
+      background-color: #e8e5df;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .envelope-back { position: relative; width: 240px; }
+    .envelope-back-body { background: #c8a97e; width: 240px; height: 200px; border-radius: 4px; position: relative; overflow: visible; box-shadow: 3px 4px 14px rgba(0,0,0,0.2); }
+    .envelope-back-body::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%; background: #b89060; clip-path: polygon(0 0, 100% 0, 50% 70%); }
+    .envelope-photo-area { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 120px; height: 180px; z-index: 2; display: flex; align-items: flex-end; }
+    .envelope-photo-area .figure-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; }
+    .envelope-photo-area img { width: 100%; height: 100%; object-fit: cover; }
+    .love-card { background: white; padding: 8px 12px; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: #222; position: absolute; top: 60px; right: -10px; box-shadow: 2px 2px 8px rgba(0,0,0,0.15); z-index: 3; width: 110px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+  <section class="section-container">
+    <div class="scrapbook-canvas">
+      <div class="main-happy-text">Happy</div>
+
+      <div class="notepad-scrap">
+        <div class="notepad-handwriting">
+          the one<br>
+          with the<br>
+          stories<br>
+          to be<br>
+          told...
+        </div>
+      </div>
+
+      <div class="notebook-underlay"></div>
+
+      <div class="filmstrip-container">
+        <div class="filmstrip-header">
+          <h2>A Box Of Memories</h2>
+        </div>
+        
+        <div class="photo-slots-stack">
+          <div class="photo-frame">
+            <img src="b5a64224-6967-4fcf-94f8-7e14b2d8e9ad.JPG" alt="Memory Photo 1">
+          </div>
+          <div class="photo-frame">
+            <img src="IMG_6990.JPG" alt="Memory Photo 2">
+          </div>
+          <div class="photo-frame">
+            <img src="IMG_7041.JPG" alt="Memory Photo 3">
+          </div>
+        </div>
+
+        <div class="filmstrip-footer-text">ourboox</div>
+      </div>
+
+      <div class="calendar-scrap">
+        <div class="birthday-overlay-text">Birthday Hardi</div>
+        
+        <div class="calendar-header">
+          <div class="calendar-month">december</div>
+          <div class="calendar-year">2025</div>
+        </div>
+        
+        <div class="calendar-grid">
+          <div class="weekday-label">Sun</div>
+          <div class="weekday-label">Mon</div>
+          <div class="weekday-label">Tue</div>
+          <div class="weekday-label">Wed</div>
+          <div class="weekday-label">Thu</div>
+          <div class="weekday-label">Fri</div>
+          <div class="weekday-label">Sat</div>
+          
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day">1</div>
+          <div class="calendar-day sunday">2</div>
+          <div class="calendar-day">3</div>
+          <div class="calendar-day">4</div>
+          <div class="calendar-day">5</div>
+          <div class="calendar-day">6</div>
+          
+          <div class="calendar-day heart-sticker">7</div>
+          <div class="calendar-day sunday">9</div>
+          <div class="calendar-day">10</div>
+          <div class="calendar-day">11</div>
+          <div class="calendar-day">12</div>
+          <div class="calendar-day">13</div>
+          <div class="calendar-day">14</div>
+          
+          <div class="calendar-day">15</div>
+          <div class="calendar-day sunday">16</div>
+          <div class="calendar-day">17</div>
+          <div class="calendar-day">18</div>
+          <div class="calendar-day">19</div>
+          <div class="calendar-day">20</div>
+          <div class="calendar-day">21</div>
+          
+          <div class="calendar-day">22</div>
+          <div class="calendar-day sunday">23</div>
+          <div class="calendar-day">24</div>
+          <div class="calendar-day">25</div>
+          <div class="calendar-day">26</div>
+          <div class="calendar-day">27</div>
+          <div class="calendar-day">28</div>
+          
+          <div class="calendar-day">29</div>
+        </div>
+      </div>
+
+      <div class="bottom-lettering">
+        <p>
+          One year down; the rest of<br>
+          our lives to go. Happy 1-year<br>
+          anniversary! You're my<br>
+          favorite, and I'm so grateful<br>
+          I've gotten to share this<br>
+          past year with you!
+        </p>
+      </div>
+
+      <div class="gift-item" id="draggable-spotify" style="bottom: 40px; left: -60px;">
+  <div class="sp-embed-card">
+    <div class="embed-drag-handle"></div>
+    <iframe 
+      src="https://open.spotify.com/embed/track/4OAuvHryIVv4kMDNSLuPt6?utm_source=generator" 
+      width="100%" 
+      height="352" 
+      allowfullscreen="" 
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+      loading="lazy">
+    </iframe>
+  </div>
+</div>
+
+      <img class="asset-pin" src="pin.png" alt="Safety Pin Accent">
+      <img class="asset-cherry" src="cherry.png" alt="Cherry Accent">
+      <img class="asset-flower" src="flower.png" alt="White Blossom Accent">
+    </div>
+    
+    <div class="scroll-hint">Scroll Down ⇣</div>
+  </section>
+
+  <section class="section-container">
+    <div class="book-container">
+      <div id="book">
+
+        <div class="page hard">
+          <div class="cover-page">
+            <div class="cover-title-top">Happy</div>
+
+            <div class="cover-oval-frame">
+              <div class="bow">🎀</div>
+              <img class="cover-oval-photo" src="b5a64224-6967-4fcf-94f8-7e14b2d8e9ad.jpg" alt="Hardi at Merbabu">
+              <svg class="scallop-svg" viewBox="0 0 228 278" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="114" cy="139" rx="104" ry="129" stroke="#8b1a1a" stroke-width="5" fill="none"
+                  stroke-dasharray="14 6" stroke-dashoffset="3"/>
+              </svg>
+            </div>
+
+            <div style="text-align:center">
+              <div class="cover-title-bottom">Birthday</div>
+              <div class="cover-subtitle">A Special Zine Curated by Mew for Hardi's Birthday</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page">
+          <div class="letter-page">
+            <div class="folder-wrapper">
+              <div class="folder-tab">Hardi</div>
+              <div class="folder-body">
+                <div class="folder-top-row">
+                  <div class="polaroid-small">
+                    <img src="IMG_7041.JPG" alt="Your Photo">
+                  </div>
+                  <div class="folder-header-text">
+                    <span class="happy-Hardi">Happy Hardi Day.</span>
+                    <span class="date-stamp">03/2026</span>
+                  </div>
+                </div>
+                <div class="dear-Hardi">Dear Hardi,</div>
+                <div class="letter-body">
+                  As a new chapter begins, I hope you always<br>
+                  remember how special you are to me.<br>
+                  You carry so much strength, warmth, and<br>
+                  goodness in everything you do.<br>
+                  Take every lesson, every dream, and every<br>
+                  little hope with you as you grow.<br>
+                  I'll always be cheering for you, loving<br>
+                  you, and wishing the brightest things for<br>
+                  you. Here's to your journey, your<br>
+                  happiness, and all the beautiful <span class="red-underline">moments</span><br>
+                  ahead.
+                </div>
+                <div class="letter-sign">with love, mew</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page">
+          <div class="calendar-page">
+            <div class="cal-month-nav">
+              <span class="arrow">‹</span>
+              <span class="month-name">March</span>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-grid-header">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+              </div>
+              <div class="cal-row">
+                <span class="cal-day empty">·</span>
+                <span class="cal-day">22</span>
+                <span class="cal-day today">23</span>
+                <span class="cal-day">24</span>
+                <span class="cal-day">25</span>
+                <span class="cal-day">26</span>
+                <span class="cal-day">27</span>
+              </div>
+            </div>
+            <div class="cal-date-label">Monday — 23 Mar 2026</div>
+            <div class="cal-events">
+              <div class="cal-event">
+                <span class="cal-time">08:00</span>
+                <div class="cal-event-card">
+                  <div class="cal-event-title">Wake Up, Birthday Boy</div>
+                  <div class="cal-event-time-small">⏰ 08:00 – 09:00</div>
+                  <span class="cal-event-emoji" style="font-size:14px">💤💤💤</span>
+                </div>
+              </div>
+              <div class="cal-event">
+                <span class="cal-time">09:00</span>
+                <div class="cal-event-card red">
+                  <div class="cal-event-title">Hardi's Birthday 🎂</div>
+                  <div class="cal-event-time-small">⏰ 09:00 – 10:30</div>
+                  <span class="cal-event-emoji">🐱</span>
+                </div>
+              </div>
+              <div class="cal-event">
+                <span class="cal-time">11:00</span>
+                <div class="cal-event-card green">
+                  <div class="cal-event-title">Cuti Bersama Hari Raya Idul Fitri</div>
+                  <div class="cal-event-time-small">⏰ 11:00 – 12:30</div>
+                </div>
+              </div>
+              <div class="cal-event">
+                <span class="cal-time">13:00</span>
+                <div class="cal-event-card blue">
+                  <div class="cal-event-title">VC aja #boikotidr</div>
+                  <div class="cal-event-time-small">⏰ 13:00 – 14:00</div>
+                  <span class="cal-event-emoji">📱</span>
+                </div>
+              </div>
+            </div>
+            <div class="cal-chat-row" style="margin-top:8px;">
+              <div class="chat-avatar" style="background:#8b1a1a;color:white;font-size:10px;display:flex;align-items:center;justify-content:center;">F</div>
+              <div class="chat-bubble">HBD dut 💤🎉</div>
+              <div class="chat-bubble green-bubble">nnt ak traktir yh</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page">
+          <div class="stripe-page">
+            <div class="envelope-card" style="height:130px;">
+              <div style="height:65px;"></div>
+              <div class="envelope-seal">♥</div>
+            </div>
+            <div class="affirmation-card">
+              <p>
+                <em>You are worthy.</em><br><br>
+                Worthy of love, happiness,<br>
+                rest, and joy—just as<br>
+                you are.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="page">
+          <div class="wish-page">
+            <div>
+              <div class="wish-title">Let's make a</div>
+              <div class="wish-subtitle">(wiiiiiiiiiiiiiiiish)</div>
+            </div>
+            <div class="polaroid-wish">
+              <span class="hat-left">🎉</span>
+              <span class="hat-right">🎊</span>
+              <div class="photo-area">
+                <img src="b5a64224-6967-4fcf-94f8-7e14b2d8e9ad.jpg" alt="Your Wish Photo">
+              </div>
+              <div class="polaroid-date-row">
+                <span>MAR</span>
+                <span style="font-weight:700;color:#8b1a1a;">23</span>
+                <span>2026</span>
+              </div>
+            </div>
+            <div class="ribbon-bow">🎀</div>
+          </div>
+        </div>
+
+        <div class="page">
+          <div class="wordsearch-page">
+            <div class="ws-page-label">
+              <span>PAGE</span>
+              <span>(24)</span>
+            </div>
+            <div class="ws-grid">
+              <div style="display:flex;gap:6px;width:100%;justify-content:center;">
+                <div class="ws-circle">B</div>
+                <div class="ws-circle">D</div>
+                <div style="width:34px"></div>
+                <div class="ws-circle">H</div>
+              </div>
+              <div style="display:flex;gap:6px;width:100%;justify-content:center;">
+                <div class="ws-circle">H</div>
+                <div style="width:34px"></div>
+                <div class="ws-circle">H</div>
+                <div style="width:34px"></div>
+                <div class="ws-circle">B</div>
+              </div>
+              <div style="display:flex;gap:6px;width:100%;justify-content:center;">
+                <div class="ws-circle">B</div>
+                <div style="width:34px"></div>
+                <div class="ws-circle">D</div>
+                <div style="width:34px"></div>
+                <div class="ws-circle">H</div>
+                <div class="ws-circle">B</div>
+                <div class="ws-circle">D</div>
+              </div>
+              <div style="display:flex;gap:6px;width:100%;justify-content:center;">
+                <div style="width:34px"></div>
+                <div class="ws-circle">H</div>
+                <div class="ws-circle">B</div>
+                <div class="ws-circle">D</div>
+                <div style="width:34px"></div>
+                <div class="ws-circle">R</div>
+              </div>
+            </div>
+            <div class="ws-legend">
+              <div class="col">
+                <span>HAPPY</span>
+                <span>HAPPY</span>
+                <span>HAPPY</span>
+              </div>
+              <div class="col" style="text-align:center;">
+                <span>(BIRTHDAY)</span>
+                <span>(BIRTHDAY)</span>
+                <span>(BIRTHDAY)</span>
+              </div>
+              <div class="col" style="text-align:right;">
+                <span>MY Hardi</span>
+                <span>MY Hardi</span>
+                <span>MY Hardi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page">
+          <div class="gift-page">
+            <div class="gift-title">
+              a gift guide<br>
+              <em>(for this)</em><br>
+              birthday.
+            </div>
+            <div class="gift-notes-card">
+              <div class="notes-header">
+                <span class="notes-back">‹ Notes</span>
+                <span class="notes-title-label">⤴ ···</span>
+              </div>
+              <div class="notes-content">RAHASIA |</div>
+            </div>
+            <div class="gift-meme-card">
+              <div class="meme-photo">
+                <img src="IMG_6990.JPG" alt="Your Wish Photo">
+              </div>
+              <div class="meme-caption">JANGAN DIKASITAU 🤫</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page hard">
+          <div class="backcover-page">
+            <div class="envelope-back">
+              <div class="envelope-back-body">
+                <div class="envelope-photo-area">
+                  <div class="figure-placeholder">
+                    <div style="width:70px;height:120px;background:#c8a97e;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px;">🌹</div>
+                  </div>
+                </div>
+                <div class="love-card">
+                  i love u sooooo much <3
+                </div>
+              </div>
+              <div style="text-align:center;margin-top:0;font-size:70px;line-height:0.8;filter:hue-rotate(340deg) saturate(2);">
+                🎀
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const pageFlip = new St.PageFlip(document.getElementById("book"), {
+        width: 450,
+        height: 600,
+        size: "fixed",
+        showCover: true,
+        drawShadow: true,
+        usePortrait: false,
+        startPage: 0,
+        flippingTime: 700,
+        useMouseEvents: true,
+      });
+      pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+    });
+/* ══ SPOTIFY EMBED CARD DRAG LOGIC ═════════════════════════════ */
+const dragItem = document.getElementById('draggable-spotify');
+let isDragging = false;
+let startX, startY, initialLeft, initialTop;
+
+if (dragItem) {
+  // Capture handles or fallback target bounding box
+  const handle = dragItem.querySelector('.embed-drag-handle') || dragItem;
+
+  handle.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  window.addEventListener('mousemove', (e) => { if (isDragging) moveDrag(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', endDrag);
+
+  handle.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  window.addEventListener('touchend', endDrag);
+}
+
+function startDrag(clientX, clientY) {
+  isDragging = true;
+  dragItem.classList.add('dragging');
+  
+  startX = clientX;
+  startY = clientY;
+  
+  // Calculate computed properties relative to base offset layers
+  const style = window.getComputedStyle(dragItem);
+  initialLeft = parseInt(style.left) || 0;
+  initialTop = parseInt(style.top) || 0;
+}
+
+function moveDrag(clientX, clientY) {
+  const dx = clientX - startX;
+  const dy = clientY - startY;
+  
+  dragItem.style.left = (initialLeft + dx) + 'px';
+  dragItem.style.top = (initialTop + dy) + 'px';
+  dragItem.style.bottom = 'auto'; // Remove default bottom offset rules once custom dragging updates begin
+}
+
+function endDrag() {
+  if (isDragging) {
+    isDragging = false;
+    dragItem.classList.remove('dragging');
+  }
+}
+  </script>
+</body>
+</html>
