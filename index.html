@@ -321,56 +321,62 @@
       filter: drop-shadow(4px 8px 12px rgba(0,0,0,0.5));
     }
 
-   /* ─── SPOTIFY DRAGGABLE EMBED STYLING ─── */
-.gift-item {
-  position: absolute;
-  user-select: none;
-  cursor: grab;
-  touch-action: none;
-  z-index: 100;
-}
-.gift-item:active {
-  cursor: grabbing;
-}
-.gift-item.dragging {
-  transition: none !important;
-  z-index: 9999 !important;
-  cursor: grabbing;
-}
-.gift-item.dragging iframe {
-  pointer-events: none; /* Disable iframe pointer events while dragging so drag isn't stolen */
-}
+    /* ─── FIXED DRAGGABLE CARD STYLING (FROM INDEX1) ─── */
+    .gift-item {
+      position: fixed; /* Fixed viewport reference avoids parent layout containment issues */
+      bottom: 30px;
+      left: 30px;
+      user-select: none;
+      cursor: grab;
+      touch-action: none;
+      z-index: 2000; /* Stays reliably over other elements */
+    }
+    
+    .gift-item:active {
+      cursor: grabbing;
+    }
+    
+    .gift-item.dragging {
+      transition: none !important;
+      cursor: grabbing;
+    }
+    
+    .gift-item.dragging iframe {
+      pointer-events: none; /* Keeps iframe inside from eating drag gestures */
+    }
 
-/* Spotify embed card container */
-.sp-embed-card {
-  background: #121212;
-  border-radius: 14px;
-  overflow: hidden;
-  width: 360px; /* Matching exact index1 width */
-  box-shadow: 6px 8px 28px rgba(0,0,0,0.38);
-}
-.sp-embed-card iframe {
-  display: block;
-  width: 100%;
-  border: none;
-}
+    .sp-embed-card {
+      background: #121212;
+      border-radius: 14px;
+      overflow: hidden;
+      width: 320px;
+      box-shadow: 0 16px 38px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .sp-embed-card iframe {
+      display: block;
+      width: 100%;
+      border: none;
+    }
 
-/* Drag handle strip */
-.embed-drag-handle {
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  background: rgba(0,0,0,0.18);
-}
-.embed-drag-handle::after {
-  content: '';
-  width: 36px;
-  height: 4px;
-  border-radius: 2px;
-  background: rgba(255,255,255,0.4);
-}
+    .embed-drag-handle {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .embed-drag-handle::after {
+      content: '';
+      width: 40px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.3);
+    }
 
     /* Scroll Indicator Arrow */
     .scroll-hint {
@@ -391,7 +397,6 @@
       40% { transform: translate(-50%, -10px); }
       60% { transform: translate(-50%, -5px); }
     }
-
 
     /* ─── SECTION 2: PAGE2.HTML BOOK ZINE ─── */
     .book-container {
@@ -834,6 +839,13 @@
 </head>
 <body>
 
+  <div class="gift-item" id="draggable-spotify">
+    <div class="sp-embed-card">
+      <div class="embed-drag-handle"></div>
+      <iframe src="https://open.spotify.com/embed/track/6UorE6gP9Cba4g17ZpU7pA?utm_source=generator&theme=0" width="100%" height="152" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+  </div>
+
   <section class="section-container">
     <div class="scrapbook-canvas">
       <div class="main-happy-text">Happy</div>
@@ -933,20 +945,6 @@
           past year with you!
         </p>
       </div>
-
-      <div class="gift-item" id="draggable-spotify" style="bottom: 40px; left: -60px;">
-  <div class="sp-embed-card">
-    <div class="embed-drag-handle"></div>
-    <iframe 
-      src="https://open.spotify.com/embed/track/4OAuvHryIVv4kMDNSLuPt6?utm_source=generator" 
-      width="100%" 
-      height="352" 
-      allowfullscreen="" 
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-      loading="lazy">
-    </iframe>
-  </div>
-</div>
 
       <img class="asset-pin" src="pin.png" alt="Safety Pin Accent">
       <img class="asset-cherry" src="cherry.png" alt="Cherry Accent">
@@ -1223,6 +1221,7 @@
   <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      // 1. ZINE BOOK FLIPPER INITIALIZATION
       const pageFlip = new St.PageFlip(document.getElementById("book"), {
         width: 450,
         height: 600,
@@ -1235,57 +1234,54 @@
         useMouseEvents: true,
       });
       pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
+      // 2. MOUSE & TOUCH DRAG MANAGER FOR SPOTIFY EMBED
+      const dragItem = document.getElementById('draggable-spotify');
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+
+      if (dragItem) {
+        const handle = dragItem.querySelector('.embed-drag-handle') || dragItem;
+
+        handle.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+        window.addEventListener('mousemove', (e) => { if (isDragging) moveDrag(e.clientX, e.clientY); });
+        window.addEventListener('mouseup', endDrag);
+
+        handle.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+          if (isDragging && e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        window.addEventListener('touchend', endDrag);
+      }
+
+      function startDrag(clientX, clientY) {
+        isDragging = true;
+        dragItem.classList.add('dragging');
+        startX = clientX;
+        startY = clientY;
+        
+        const style = window.getComputedStyle(dragItem);
+        initialLeft = parseInt(style.left) || 0;
+        initialTop = parseInt(style.top) || 0;
+      }
+
+      function moveDrag(clientX, clientY) {
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+        dragItem.style.left = (initialLeft + dx) + 'px';
+        dragItem.style.top = (initialTop + dy) + 'px';
+        dragItem.style.bottom = 'auto'; // Break basic attachment rules once moved
+      }
+
+      function endDrag() {
+        if (isDragging) {
+          isDragging = false;
+          dragItem.classList.remove('dragging');
+        }
+      }
     });
-/* ══ SPOTIFY EMBED CARD DRAG LOGIC ═════════════════════════════ */
-const dragItem = document.getElementById('draggable-spotify');
-let isDragging = false;
-let startX, startY, initialLeft, initialTop;
-
-if (dragItem) {
-  // Capture handles or fallback target bounding box
-  const handle = dragItem.querySelector('.embed-drag-handle') || dragItem;
-
-  handle.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
-  window.addEventListener('mousemove', (e) => { if (isDragging) moveDrag(e.clientX, e.clientY); });
-  window.addEventListener('mouseup', endDrag);
-
-  handle.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
-  }, { passive: true });
-  window.addEventListener('touchmove', (e) => {
-    if (isDragging && e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
-  }, { passive: true });
-  window.addEventListener('touchend', endDrag);
-}
-
-function startDrag(clientX, clientY) {
-  isDragging = true;
-  dragItem.classList.add('dragging');
-  
-  startX = clientX;
-  startY = clientY;
-  
-  // Calculate computed properties relative to base offset layers
-  const style = window.getComputedStyle(dragItem);
-  initialLeft = parseInt(style.left) || 0;
-  initialTop = parseInt(style.top) || 0;
-}
-
-function moveDrag(clientX, clientY) {
-  const dx = clientX - startX;
-  const dy = clientY - startY;
-  
-  dragItem.style.left = (initialLeft + dx) + 'px';
-  dragItem.style.top = (initialTop + dy) + 'px';
-  dragItem.style.bottom = 'auto'; // Remove default bottom offset rules once custom dragging updates begin
-}
-
-function endDrag() {
-  if (isDragging) {
-    isDragging = false;
-    dragItem.classList.remove('dragging');
-  }
-}
   </script>
 </body>
 </html>
